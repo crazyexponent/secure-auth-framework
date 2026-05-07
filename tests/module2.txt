@@ -1,0 +1,41 @@
+
+============================================================
+  SECURE AUTH FRAMEWORK — MODULE 2: PASSWORD MANAGER
+============================================================
+
+--- TEST 1: Weak Password Check ---
+  Password : password123
+  Strength : Weak (20/100)
+  Passed   : False
+  ✗ Must contain at least one uppercase letter
+  ✗ Must contain at least one special character (!@#$...)
+  ✗ Password is in known weak password list
+
+--- TEST 2: Strong Password Check ---
+  Password : SecureOS@2024!
+  Strength : Strong (100/100)
+  Passed   : True
+  ✓ length
+  ✓ uppercase
+  ✓ lowercase
+  ✓ digit
+  ✓ special_char
+  ✓ not_common
+  ✓ no_repeated_chars
+
+--- TEST 3: bcrypt Hash & Verify ---
+  Hashing password with cost factor 12...
+  Hash     : $2b$12$GDgF4ORwxI7Gm9UYoHO/0uuo1ib7WAwYl8dhK4CPwvJ64G9pUIViq
+  Correct password match : True
+  Wrong password match   : False
+
+--- TEST 4: Password Reuse Prevention ---
+  Reuse of last password : True  ← should be True
+  New unique password    : True  ← should be True
+
+--- TEST 5: Password Expiry Status ---
+  Days until expiry : 89
+  Is expired        : False
+
+[DONE] Module 2 Password Manager Demo Complete.
+

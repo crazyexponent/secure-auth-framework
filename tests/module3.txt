@@ -1,0 +1,49 @@
+
+============================================================
+  SECURE AUTH FRAMEWORK — MODULE 3: SESSION MANAGER
+============================================================
+
+--- TEST 1: JWT Token Issuance ---
+  Access token  : eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ...
+  Refresh token : eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ...
+
+--- TEST 2: Token Verification ---
+  Valid         : True
+  User          : devops_student
+  Role          : user
+  Issuer        : SecureAuthOS
+  Token type    : access
+  Expires at    : 2026-05-07 16:54:14 UTC
+
+--- TEST 3: Tampered Token Detection ---
+  Tampered token valid : False
+  Error                : INVALID_TOKEN: Signature verification failed
+
+--- TEST 4: Session Management ---
+[SESSION] Created session 997a57016f8c3306 for 'devops_student' from 192.168.1.10
+[SESSION] Created session d846d27ddc7b7c3d for 'devops_student' from 10.0.0.5
+  Active sessions : 2
+[SESSION] Terminated session 997a57016f8c3306 for 'devops_student'
+  After terminate : 1 session(s)
+
+--- TEST 5: Token Revocation (Logout) ---
+[REVOKED] Token JTI=75eb6170... for user 'devops_student' | Reason: user_logout
+  Token revoked   : True
+
+  Revoked tokens (1 total):
+  JTI: 75eb6170... | User: devops_student | Reason: user_logout | At: 2026-05-07T16:24:14.686493+00:00
+
+--- TEST 6: Privilege Escalation Defense ---
+  [✓] Role 'user' (level 1) accessing 'user' resource (level 1) → ALLOWED
+  [✗] Role 'user' (level 1) accessing 'admin' resource (level 3) → DENIED
+  [✓] Role 'admin' (level 3) accessing 'admin' resource (level 3) → ALLOWED
+  [✗] Role 'guest' (level 0) accessing 'root' resource (level 4) → DENIED
+  [✓] Role 'root' (level 4) accessing 'root' resource (level 4) → ALLOWED
+
+--- TEST 7: Force Logout All Sessions ---
+[SESSION] Created session 509afe1401b04fc8 for 'devops_student' from 172.16.0.1
+[SESSION] Terminated all 2 session(s) for 'devops_student'
+  Sessions after force logout : 0
+
+[DONE] Module 3 Session Manager Demo Complete.
+
