@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SecureAuth OS — Signup</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <style>
+    .login-page{
+      min-height:100vh;display:flex;align-items:center;justify-content:center;
+      position:relative;z-index:1;padding:40px 20px;
+    }
+    .login-card{
+      width:100%;max-width:480px;
+      background:rgba(15,23,42,.6);backdrop-filter:blur(24px) saturate(1.6);
+      border:1px solid rgba(255,255,255,.08);border-radius:32px;
+      padding:48px 40px;position:relative;overflow:hidden;
+      box-shadow:0 30px 80px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.05);
+      animation:cardEnter .8s cubic-bezier(.16,1,.3,1) forwards;
+      opacity:0;transform:translateY(30px) scale(.97);
+    }
+    @keyframes cardEnter{
+      to{opacity:1;transform:translateY(0) scale(1)}
+    }
+    .login-card::before{
+      content:'';position:absolute;top:0;left:0;right:0;height:3px;
+      background:linear-gradient(90deg,#2563eb,#7c3aed,#06b6d4);
+    }
+    .login-card::after{
+      content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;
+      background:conic-gradient(from 180deg,transparent,rgba(56,189,248,.04),transparent 30%);
+      animation:cardShine 8s linear infinite;
+    }
+    @keyframes cardShine{to{transform:rotate(360deg)}}
+
+    .login-title{
+      text-align:center;margin-bottom:12px;
+      font:900 32px 'Orbitron',sans-serif;
+      background:linear-gradient(135deg,#e2e8f0,#38bdf8);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+      position:relative;z-index:1;
+    }
+    .login-subtitle{
+      text-align:center;color:#64748b;font-size:14px;margin-bottom:36px;
+      position:relative;z-index:1;
+    }
+    .login-icon{
+      text-align:center;font-size:56px;margin-bottom:20px;
+      position:relative;z-index:1;
+      animation:iconFloat 3s ease-in-out infinite;
+    }
+    @keyframes iconFloat{
+      0%,100%{transform:translateY(0)}
+      50%{transform:translateY(-8px)}
+    }
+
+    .login-form{position:relative;z-index:1}
+    .login-form .input-group{margin-bottom:22px}
+    .login-form .input-group label{
+      display:flex;align-items:center;gap:6px;
+      margin-bottom:10px;color:#94a3b8;font-size:12px;
+      font-weight:600;letter-spacing:1px;text-transform:uppercase;
+    }
+    .login-form .input-group input{
+      width:100%;padding:16px 20px;
+      border:1px solid rgba(255,255,255,.08);border-radius:16px;
+      background:rgba(3,7,18,.6);color:#e2e8f0;font-size:16px;
+      font-family:'Inter',sans-serif;transition:.4s;
+    }
+    .login-form .input-group input:focus{
+      outline:none;border-color:#38bdf8;
+      box-shadow:0 0 0 4px rgba(56,189,248,.1),0 0 30px rgba(56,189,248,.1);
+    }
+    .login-form .input-group input::placeholder{color:#334155}
+
+    .login-btn{
+      width:100%;padding:17px;border:none;border-radius:16px;
+      background:linear-gradient(135deg,#2563eb,#7c3aed);
+      color:white;font:700 16px 'Inter',sans-serif;cursor:pointer;
+      transition:.4s;position:relative;overflow:hidden;
+      margin-top:8px;letter-spacing:.3px;
+    }
+    .login-btn::before{
+      content:'';position:absolute;inset:0;
+      background:linear-gradient(135deg,#3b82f6,#8b5cf6);
+      opacity:0;transition:.3s;
+    }
+    .login-btn:hover{
+      transform:translateY(-3px);
+      box-shadow:0 15px 40px rgba(37,99,235,.35);
+    }
+    .login-btn:hover::before{opacity:1}
+    .login-btn span{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;gap:8px}
+    .login-btn:active{transform:translateY(0)}
+
+    .login-error{
+      margin-top:18px;padding:14px 18px;border-radius:14px;
+      background:rgba(220,38,38,.12);border:1px solid rgba(220,38,38,.2);
+      color:#fca5a5;font-size:14px;text-align:center;
+      display:none;position:relative;z-index:1;
+      animation:shake .4s ease;
+    }
+    @keyframes shake{
+      0%,100%{transform:translateX(0)}
+      20%,60%{transform:translateX(-6px)}
+      40%,80%{transform:translateX(6px)}
+    }
+
+    .login-footer{
+      margin-top:28px;text-align:center;color:#475569;font-size:13px;
+      position:relative;z-index:1;
+    }
+    .login-footer a{color:#38bdf8;text-decoration:none;font-weight:500}
+
+    .security-note{
+      margin-top:24px;padding:16px;border-radius:14px;
+      background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.1);
+      position:relative;z-index:1;
+    }
+    .security-note p{
+      color:#64748b;font-size:12px;line-height:1.7;
+      display:flex;align-items:flex-start;gap:8px;
+    }
+    .security-note .check{color:#4ade80;flex-shrink:0;margin-top:1px}
+  </style>
+
+<script>
+  if (localStorage.getItem('theme') === 'light') {
+    document.documentElement.classList.add('light-mode');
+  }
+</script>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+<div class="glow-orb blue"></div>
+<div class="glow-orb cyan"></div>
+<div class="glow-orb purple"></div>
+
+<!-- Loader -->
+<div class="loader-screen" id="loader">
+  <h1>SecureAuth OS</h1>
+  <p style="color:#64748b;margin-top:16px;letter-spacing:3px;font-size:13px;text-transform:uppercase">Loading Secure Login...</p>
+  <div class="loader-bar"><span></span></div>
+</div>
+
+
+
+<div class="login-page">
+  <div class="login-card">
+    <div class="login-icon">🔐</div>
+    <h1 class="login-title">OS Signup</h1>
+    <p class="login-subtitle">Create an account to access the operating system</p>
+
+    <form class="login-form" id="signupForm" onsubmit="return handleSignup(event)">
+      <div class="input-group">
+        <label>🧑 Username</label>
+        <input type="text" id="username" placeholder="Enter your username" autocomplete="off" required>
+      </div>
+      <div class="input-group">
+        <label>🔑 Password</label>
+        <input type="password" id="password" placeholder="Enter your password" required>
+      </div>
+      <div class="input-group">
+        <label>🛡️ Role</label>
+        <select id="role" style="width:100%;padding:16px 20px;border:1px solid rgba(255,255,255,.08);border-radius:16px;background:rgba(3,7,18,.6);color:#e2e8f0;font-size:16px;font-family:'Inter',sans-serif;transition:.4s;appearance:none;cursor:pointer;">
+          <option value="user">User</option>
+          <option value="admin">Admin</option>
+        </select>
+      </div>
+      <button type="submit" class="login-btn" id="signupBtn">
+        <span>🚀 Create Account</span>
+      </button>
+    </form>
+
+    <div class="login-error" id="signupError">
+      ✗ Signup failed
+    </div>
+
+    <div class="login-footer">
+      <p>Already have an account? <a href="/">Login here</a></p>
+    </div>
+
+    <div class="security-note">
+      <p><span class="check">✓</span> Protected by bcrypt password hashing with adaptive salt rounds</p>
+      <p style="margin-top:6px"><span class="check">✓</span> All login attempts are logged for security audit</p>
+    </div>
+
+
+  </div>
+</div>
+
+<script>
+// ── Particles (lightweight version) ──
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+let particles = [];
+
+function resizeCanvas(){ canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+class Particle {
+  constructor(){ this.reset(); }
+  reset(){
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.size = Math.random() * 2 + 0.5;
+    this.speedX = (Math.random() - 0.5) * 0.3;
+    this.speedY = (Math.random() - 0.5) * 0.3;
+    this.opacity = Math.random() * 0.4 + 0.1;
+    this.hue = Math.random() > 0.5 ? 200 : 260;
+  }
+  update(){
+    this.x += this.speedX; this.y += this.speedY;
+    if(this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
+  }
+  draw(){
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fillStyle = `hsla(${this.hue},80%,70%,${this.opacity})`;
+    ctx.fill();
+  }
+}
+for(let i = 0; i < 60; i++) particles.push(new Particle());
+
+function drawLines(){
+  for(let i = 0; i < particles.length; i++){
+    for(let j = i + 1; j < particles.length; j++){
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if(dist < 140){
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.strokeStyle = `rgba(56,189,248,${0.05 * (1 - dist/140)})`;
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
+    }
+  }
+}
+function animate(){
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => { p.update(); p.draw(); });
+  drawLines();
+  requestAnimationFrame(animate);
+}
+animate();
+
+// ── Loader ──
+window.addEventListener('load', () => {
+  setTimeout(() => document.getElementById('loader').classList.add('hidden'), 1800);
+});
+
+// ── Signup Handler ──
+async function handleSignup(e){
+  e.preventDefault();
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
+  const role = document.getElementById('role').value;
+  const errorEl = document.getElementById('signupError');
+  const btn = document.getElementById('signupBtn');
+
+  // Disable button during processing
+  btn.innerHTML = '<span>⏳ Creating Account...</span>';
+  btn.style.pointerEvents = 'none';
+  btn.style.opacity = '0.7';
+  errorEl.style.display = 'none';
+
+  try {
+    const response = await fetch('/api/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password, role })
+    });
+    
+    const data = await response.json();
+
+    if(response.ok){
+      btn.innerHTML = '<span>✓ Account Created</span>';
+      btn.style.background = 'linear-gradient(135deg,#16a34a,#22c55e)';
+
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 1000);
+    } else {
+      errorEl.textContent = '✗ ' + (data.error || 'Signup failed');
+      errorEl.style.display = 'block';
+      btn.innerHTML = '<span>🚀 Create Account</span>';
+      btn.style.pointerEvents = 'auto';
+      btn.style.opacity = '1';
+    }
+  } catch (error) {
+    errorEl.textContent = '✗ Network error occurred';
+    errorEl.style.display = 'block';
+    btn.innerHTML = '<span>🚀 Create Account</span>';
+    btn.style.pointerEvents = 'auto';
+    btn.style.opacity = '1';
+  }
+
+  return false;
+}
+</script>
+
+<!-- Theme Toggle Script -->
+<script>
+  function toggleTheme() {
+    document.documentElement.classList.toggle('light-mode');
+    const isLight = document.documentElement.classList.contains('light-mode');
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+    document.getElementById('themeToggleBtn').innerHTML = isLight ? '🌙 Dark Mode' : '☀️ Light Mode';
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const btn = document.createElement('button');
+    btn.id = 'themeToggleBtn';
+    btn.className = 'theme-toggle';
+    btn.innerHTML = document.documentElement.classList.contains('light-mode') ? '🌙 Dark Mode' : '☀️ Light Mode';
+    btn.onclick = toggleTheme;
+    document.body.appendChild(btn);
+  });
+</script>
+
+</body>
+</html>

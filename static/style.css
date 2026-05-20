@@ -1,0 +1,368 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+
+body{
+  background:#030712;
+  color:#e2e8f0;
+  font-family:'Inter',sans-serif;
+  overflow-x:hidden;
+  min-height:100vh;
+}
+
+/* ── PARTICLE CANVAS ── */
+#particles{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+/* ── AMBIENT GLOW ORBS ── */
+.glow-orb{
+  position:fixed;border-radius:50%;filter:blur(120px);opacity:.18;
+  pointer-events:none;z-index:0;animation:orbFloat 20s ease-in-out infinite;
+}
+.glow-orb.blue{width:600px;height:600px;background:#2563eb;top:-10%;left:-5%}
+.glow-orb.cyan{width:500px;height:500px;background:#06b6d4;bottom:-10%;right:-5%;animation-delay:-7s}
+.glow-orb.purple{width:400px;height:400px;background:#7c3aed;top:40%;left:50%;animation-delay:-14s}
+
+@keyframes orbFloat{
+  0%,100%{transform:translate(0,0) scale(1)}
+  33%{transform:translate(40px,-30px) scale(1.1)}
+  66%{transform:translate(-30px,40px) scale(.9)}
+}
+
+/* ── LOADER ── */
+.loader-screen{
+  position:fixed;inset:0;background:#030712;display:flex;
+  justify-content:center;align-items:center;z-index:10000;
+  flex-direction:column;transition:opacity .8s,visibility .8s;
+}
+.loader-screen.hidden{opacity:0;visibility:hidden}
+.loader-screen h1{
+  font:900 56px 'Orbitron',sans-serif;
+  background:linear-gradient(135deg,#38bdf8,#818cf8,#c084fc);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  animation:loaderPulse 2s ease-in-out infinite;
+}
+.loader-bar{
+  width:240px;height:3px;background:#1e293b;border-radius:4px;
+  margin-top:32px;overflow:hidden;
+}
+.loader-bar span{
+  display:block;height:100%;width:0;border-radius:4px;
+  background:linear-gradient(90deg,#2563eb,#06b6d4,#818cf8);
+  animation:loadFill 2s ease-in-out forwards;
+}
+@keyframes loaderPulse{0%,100%{opacity:1}50%{opacity:.5}}
+@keyframes loadFill{to{width:100%}}
+
+/* ── NAVBAR ── */
+.navbar{
+  position:sticky;top:0;z-index:1000;
+  background:rgba(3,7,18,.82);backdrop-filter:blur(20px) saturate(1.8);
+  border-bottom:1px solid rgba(255,255,255,.06);
+  padding:0 40px;height:70px;display:flex;align-items:center;justify-content:space-between;
+  transition:box-shadow .3s;
+}
+.navbar.scrolled{box-shadow:0 4px 30px rgba(0,0,0,.5)}
+.nav-logo{font:700 24px 'Orbitron',sans-serif;color:#38bdf8;display:flex;align-items:center;gap:10px}
+.nav-logo .shield{font-size:28px}
+.nav-links{display:flex;gap:6px}
+.nav-links a{
+  color:#94a3b8;text-decoration:none;padding:10px 18px;border-radius:12px;
+  font-weight:500;font-size:14px;transition:.3s;position:relative;
+}
+.nav-links a:hover,.nav-links a.active{color:#e2e8f0;background:rgba(56,189,248,.08)}
+.nav-links a.active::after{
+  content:'';position:absolute;bottom:4px;left:50%;transform:translateX(-50%);
+  width:20px;height:2px;background:#38bdf8;border-radius:2px;
+}
+
+/* ── CONTAINER ── */
+.container{max-width:1400px;margin:auto;padding:40px 30px;position:relative;z-index:1}
+
+/* ── STATUS BAR ── */
+.status-bar{display:flex;gap:12px;margin-bottom:40px;flex-wrap:wrap}
+.status-pill{
+  background:rgba(15,23,42,.6);border:1px solid rgba(255,255,255,.06);
+  padding:10px 20px;border-radius:100px;font-size:13px;color:#94a3b8;
+  display:flex;align-items:center;gap:8px;backdrop-filter:blur(10px);
+}
+.status-pill .dot-live{
+  width:8px;height:8px;border-radius:50%;background:#22c55e;
+  animation:blink 2s ease-in-out infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ── HERO ── */
+.hero{
+  background:rgba(15,23,42,.5);backdrop-filter:blur(16px);
+  border:1px solid rgba(255,255,255,.06);border-radius:28px;
+  padding:60px;margin-bottom:50px;
+  box-shadow:0 25px 60px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.04);
+}
+.hero-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:50px;align-items:center}
+.hero h1{
+  font:900 52px/1.1 'Orbitron',sans-serif;
+  background:linear-gradient(135deg,#e2e8f0 30%,#38bdf8 60%,#818cf8);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  margin-bottom:24px;
+}
+.hero-desc{color:#94a3b8;font-size:17px;line-height:1.9;max-width:520px}
+.hero-badges{display:flex;gap:10px;margin-top:28px;flex-wrap:wrap}
+.hero-badge{
+  padding:8px 16px;border-radius:100px;font-size:12px;font-weight:600;
+  letter-spacing:.5px;text-transform:uppercase;
+  border:1px solid rgba(255,255,255,.08);color:#94a3b8;
+}
+.hero-badge.blue{background:rgba(37,99,235,.15);color:#60a5fa;border-color:rgba(37,99,235,.3)}
+.hero-badge.cyan{background:rgba(6,182,212,.15);color:#22d3ee;border-color:rgba(6,182,212,.3)}
+.hero-badge.purple{background:rgba(124,58,237,.15);color:#a78bfa;border-color:rgba(124,58,237,.3)}
+.hero-badge.green{background:rgba(34,197,94,.15);color:#4ade80;border-color:rgba(34,197,94,.3)}
+
+/* ── LOGIN BOX ── */
+.login-panel{
+  display:grid;grid-template-columns:1fr 1fr;gap:20px;
+}
+.login-box{
+  background:rgba(3,7,18,.8);border:1px solid rgba(255,255,255,.06);
+  border-radius:24px;padding:32px;
+  box-shadow:0 15px 40px rgba(0,0,0,.3);
+}
+.login-box h2{
+  font:600 20px 'Orbitron',sans-serif;color:#38bdf8;margin-bottom:24px;
+  display:flex;align-items:center;gap:10px;
+}
+.input-group{margin-bottom:18px}
+.input-group label{display:block;margin-bottom:8px;color:#94a3b8;font-size:13px;font-weight:500;letter-spacing:.5px;text-transform:uppercase}
+.input-group input{
+  width:100%;padding:14px 18px;border:1px solid rgba(255,255,255,.06);
+  border-radius:14px;background:rgba(15,23,42,.8);color:#e2e8f0;
+  font-size:15px;transition:.3s;font-family:'Inter',sans-serif;
+}
+.input-group input:focus{outline:none;border-color:#38bdf8;box-shadow:0 0 20px rgba(56,189,248,.15)}
+.input-group input::placeholder{color:#475569}
+
+.btn{
+  width:100%;padding:15px;border:none;border-radius:14px;
+  background:linear-gradient(135deg,#2563eb,#7c3aed);
+  color:white;font:600 15px 'Inter',sans-serif;cursor:pointer;
+  transition:.3s;position:relative;overflow:hidden;
+}
+.btn::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,#3b82f6,#8b5cf6);
+  opacity:0;transition:.3s;
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(37,99,235,.3)}
+.btn:hover::before{opacity:1}
+.btn span{position:relative;z-index:1}
+.btn:active{transform:translateY(0)}
+
+.btn-danger{background:linear-gradient(135deg,#dc2626,#ef4444)}
+.btn-danger::before{background:linear-gradient(135deg,#ef4444,#f87171)}
+.btn-danger:hover{box-shadow:0 10px 30px rgba(239,68,68,.3)}
+
+.hidden{display:none!important}
+
+/* ── AUTHENTICATOR ── */
+.auth-device{
+  background:rgba(3,7,18,.8);border:1px solid rgba(255,255,255,.06);
+  border-radius:24px;padding:32px;
+  box-shadow:0 15px 40px rgba(0,0,0,.3);
+}
+.auth-device h2{font:600 18px 'Orbitron',sans-serif;color:#38bdf8;margin-bottom:20px}
+.otp-display-wrap{
+  background:rgba(15,23,42,.8);border-radius:20px;padding:30px;text-align:center;
+}
+.otp-label{color:#64748b;font-size:12px;text-transform:uppercase;letter-spacing:2px;margin-bottom:16px}
+#otpDisplay{
+  font:700 52px 'Orbitron',sans-serif;letter-spacing:10px;
+  color:#22c55e;text-shadow:0 0 30px rgba(34,197,94,.3);
+}
+.otp-timer-track{
+  margin-top:20px;background:rgba(30,41,59,.5);border-radius:10px;
+  height:6px;overflow:hidden;
+}
+#otpTimer{
+  height:100%;width:100%;border-radius:10px;
+  background:linear-gradient(90deg,#22c55e,#06b6d4);
+  transition:width 1s linear;
+}
+#otpStatus{margin-top:14px;color:#64748b;font-size:13px}
+.auth-features{
+  margin-top:20px;background:rgba(15,23,42,.5);padding:20px;border-radius:16px;
+}
+.auth-features h3{color:#38bdf8;font-size:14px;margin-bottom:10px}
+.auth-features p{color:#64748b;font-size:13px;line-height:2}
+
+/* ── SECTION HEADERS ── */
+.section-header{margin-bottom:40px}
+.section-header h2{
+  font:700 38px 'Orbitron',sans-serif;
+  background:linear-gradient(135deg,#e2e8f0,#38bdf8);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  margin-bottom:14px;
+}
+.section-header p{color:#64748b;font-size:16px;line-height:1.8;max-width:700px}
+
+/* ── CARDS ── */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;margin-bottom:50px}
+.card{
+  background:rgba(15,23,42,.5);backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.06);border-radius:22px;
+  padding:30px;transition:.4s;position:relative;overflow:hidden;
+}
+.card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,#38bdf8,transparent);
+  opacity:0;transition:.4s;
+}
+.card:hover{transform:translateY(-6px);border-color:rgba(56,189,248,.15)}
+.card:hover::before{opacity:1}
+.card-icon{font-size:36px;margin-bottom:16px;display:block}
+.card h3{color:#38bdf8;margin-bottom:8px;font-size:15px;font-weight:600}
+.card .metric{
+  font:700 36px 'Orbitron',sans-serif;
+  background:linear-gradient(135deg,#e2e8f0,#38bdf8);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  margin-bottom:8px;
+}
+.card .metric-label{color:#64748b;font-size:13px}
+
+/* ── ARCHITECTURE CARDS ── */
+.arch-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:30px}
+.arch-card{
+  background:rgba(3,7,18,.6);border:1px solid rgba(255,255,255,.05);
+  border-radius:18px;padding:24px;transition:.4s;position:relative;overflow:hidden;
+}
+.arch-card::after{
+  content:'';position:absolute;inset:0;border-radius:18px;
+  background:linear-gradient(135deg,rgba(56,189,248,.05),transparent);
+  opacity:0;transition:.4s;
+}
+.arch-card:hover{transform:translateY(-4px);border-color:rgba(56,189,248,.15)}
+.arch-card:hover::after{opacity:1}
+.arch-card .icon{font-size:28px;margin-bottom:12px}
+.arch-card h4{color:#e2e8f0;font-size:14px;margin-bottom:8px;position:relative;z-index:1}
+.arch-card p{color:#64748b;font-size:13px;line-height:1.7;position:relative;z-index:1}
+
+/* ── DASHBOARD ── */
+.dashboard{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:30px}
+
+/* ── TERMINAL ── */
+.terminal{
+  background:rgba(0,0,0,.8);border:1px solid rgba(255,255,255,.06);
+  border-radius:22px;padding:24px;min-height:420px;
+  color:#4ade80;font:14px/2 'JetBrains Mono','Fira Code',monospace;
+  overflow-y:auto;
+  box-shadow:0 0 40px rgba(0,255,100,.04),inset 0 1px 0 rgba(255,255,255,.03);
+}
+.terminal-header{display:flex;gap:8px;margin-bottom:18px;align-items:center}
+.tdot{width:12px;height:12px;border-radius:50%}
+.tdot.r{background:#ef4444}.tdot.y{background:#eab308}.tdot.g{background:#22c55e}
+.terminal-title{margin-left:12px;color:#475569;font-size:12px}
+
+/* ── AUTH FLOW ── */
+.flow-panel{
+  background:rgba(15,23,42,.5);border:1px solid rgba(255,255,255,.06);
+  border-radius:22px;padding:28px;
+}
+.flow-panel h2{font:600 20px 'Orbitron',sans-serif;color:#38bdf8;margin-bottom:22px}
+.flow{display:grid;gap:12px}
+.flow-step{
+  background:rgba(3,7,18,.6);border:1px solid rgba(255,255,255,.05);
+  padding:16px 20px;border-radius:16px;display:flex;align-items:center;gap:14px;
+  transition:.3s;position:relative;overflow:hidden;
+}
+.flow-step:hover{border-color:rgba(56,189,248,.15);transform:translateX(4px)}
+.flow-step .num{
+  width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#2563eb,#7c3aed);font-size:13px;font-weight:700;flex-shrink:0;
+}
+.flow-step .label{font-size:14px;color:#e2e8f0}
+.badge{
+  margin-left:auto;padding:5px 12px;border-radius:100px;
+  font-size:11px;font-weight:600;letter-spacing:.3px;
+  background:rgba(34,197,94,.15);color:#4ade80;border:1px solid rgba(34,197,94,.2);
+}
+
+/* ── ATTACK BOX ── */
+.attack-box{
+  margin-top:20px;background:rgba(69,10,10,.4);
+  border:1px solid rgba(127,29,29,.4);border-radius:20px;padding:24px;
+}
+.attack-box h3{color:#f87171;font:600 16px 'Orbitron',sans-serif;margin-bottom:10px}
+.attack-box p{color:#fca5a5;font-size:14px;line-height:1.7;margin-bottom:16px}
+
+/* ── SECURITY GRID ── */
+.security-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-top:30px}
+.sec-card{
+  background:rgba(15,23,42,.5);border:1px solid rgba(255,255,255,.06);
+  border-radius:20px;padding:28px;transition:.4s;
+}
+.sec-card:hover{transform:translateY(-4px);border-color:rgba(56,189,248,.12)}
+.sec-card .icon{font-size:32px;margin-bottom:14px}
+.sec-card h4{color:#e2e8f0;font-size:15px;margin-bottom:10px}
+.sec-card p{color:#64748b;font-size:13px;line-height:1.8}
+
+/* ── FOOTER ── */
+.footer{
+  margin-top:80px;padding:40px 0;border-top:1px solid rgba(255,255,255,.05);
+  text-align:center;color:#475569;font-size:13px;
+}
+.footer .brand{font:600 18px 'Orbitron',sans-serif;color:#38bdf8;margin-bottom:8px}
+
+/* ── SCROLL REVEAL ── */
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .8s,transform .8s}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1024px){
+  .hero-grid,.dashboard,.login-panel{grid-template-columns:1fr}
+  .hero h1{font-size:36px}
+  .hero{padding:36px}
+  .section-header h2{font-size:28px}
+}
+@media(max-width:600px){
+  .navbar{padding:0 16px}
+  .nav-links a{padding:8px 12px;font-size:13px}
+  .container{padding:20px 16px}
+  .arch-grid{grid-template-columns:1fr 1fr}
+}
+
+/* ── LIGHT MODE ── */
+html.light-mode {
+  filter: invert(1) hue-rotate(180deg);
+}
+/* Re-invert things that shouldn't be color-shifted like emojis or specific UI elements if needed */
+html.light-mode .auth-info-item .icon,
+html.light-mode .login-icon {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 10000;
+  background: rgba(15,23,42,0.8);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #e2e8f0;
+  padding: 10px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  backdrop-filter: blur(10px);
+  transition: 0.3s;
+}
+.theme-toggle:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+html.light-mode .theme-toggle {
+  filter: invert(1) hue-rotate(180deg);
+}
